@@ -1,3 +1,5 @@
+# Mar Vall-llosera
+# Field of rearcher: Food Science
 TODO: Add more to the title of your project here
 
 # LearningR:
