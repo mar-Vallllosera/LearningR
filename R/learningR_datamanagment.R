@@ -34,7 +34,7 @@ select(NHANES, ends_with("Day"))
 select(NHANES, contains("Ag"))
 
 
-# New object --------------------------------------------------------------
+# New object or data set --------------------------------------------------------------
 # Create a new data set with a new name with lower colomunes and rows to work with
 
 nhanes_small <- select(
@@ -52,5 +52,49 @@ nhanes_small <- select(
 # look the object
 nhanes_small
 
-#Look if it is study, CTRL+SHIFT+P --> syle
-#Commit the project, CTRL+SHIFT+P --> commit
+# Look if it is study, CTRL+SHIFT+P --> syle
+# Commit the project, CTRL+SHIFT+P --> commit
+
+
+# Fixing variable names ---------------------------------------------------
+
+# data set is in camel case and we want snake format for that we do rename with and you can
+# rename the variables. Using rename wtih and then adding the data set follow but the snake case, we are
+# telling R to cahnge the name in all the data set with that style. This is because the snakecase :: is
+# already a package that you can use to rename the data set.
+
+nhanes_small <- rename_with(
+  nhanes_small,
+  snakecase::to_snake_case
+)
+nhanes_small
+
+# Using view () we can open a new screen with the data set that we select
+view(nhanes_small)
+
+# New enhcance to assign only 1 variable, when we use = to rename, the name before the "=" is the new
+# name and the name after the "="  is the old name
+
+nhanes_small <- rename(
+  nhanes_small,
+  sex = gender
+)
+
+
+# Piping ------------------------------------------------------------------
+colnames(nhanes_small)
+
+# Piping %>% (ctrl+shift+M, to the short cut of piping)
+
+nhanes_small %>%
+  colnames()
+
+# When you use piping, you do not need to add the data name afterwards, since it is already at the star
+# of the code you can directly add what you ant to do
+
+nhanes_small %>%
+  select(phys_active) %>%
+  rename(
+    physically_active = phys_active
+  )
+#run the styler to make sure the code is tidy, and then commit
