@@ -130,30 +130,97 @@ nhanes_small %>%
 
 # Filtering rows ----------------------------------------------------------
 # Filtering is depending on the logic that you apply, so it is challanging to apply filtering
-#when doing filtering double check with others to assure that is the correct way.
+# when doing filtering double check with others to assure that is the correct way.
 # == translate to it is equal to, in this case we are filtering those that are inactive
 
 nhanes_small %>%
-    filter(phys_active == "No")
+  filter(phys_active == "No")
 
-#Adding the exclamation mark in front fo the =, leads to not eqaul to No
+# Adding the exclamation mark in front fo the =, leads to not eqaul to No
 nhanes_small %>%
-    filter(phys_active != "No")
+  filter(phys_active != "No")
 
-#for eaqual to a number
+# for eaqual to a number
 
 nhanes_small %>%
-    filter(bmi == 25)
+  filter(bmi == 25)
 
-#for eaqual or above to a number
+# for eaqual or above to a number
 nhanes_small %>%
-    filter(bmi >= 25)
-#greater than the number and adding another filtering, for example in this case if they also active
-#in this case we use &, but "," is the same.
+  filter(bmi >= 25)
+# greater than the number and adding another filtering, for example in this case if they also active
+# in this case we use &, but "," is the same.
 nhanes_small %>%
-    filter(bmi >= 25&
-               phys_active == "No")
-#for or  | (ctrl+alt + key with bar in the bottom)
+  filter(bmi >= 25 &
+    phys_active == "No")
+# for or  | (ctrl+alt + key with bar in the bottom)
 nhanes_small %>%
-    filter(bmi == 25 |
-               phys_active == "No")
+  filter(bmi == 25 |
+    phys_active == "No")
+
+# Arranging rows ----------------------------------------------------------
+# You can arrange the data set based by different rows
+nhanes_small %>%
+  arrange(age)
+# if you want decending order addd (desc())
+nhanes_small %>%
+  arrange(desc(age))
+# adding an extra factor to re arrange, in this case bmi, ideally 1 or 2 is the best to sort out
+
+nhanes_small %>%
+  arrange(desc(age), bmi)
+
+
+# Mutating columns --------------------------------------------------------
+
+# The muate works as modifying or creating and it is the same as rename new= old, this is modify
+# an exiciting colomune
+
+nhanes_small %>%
+  mutate(
+    age = age * 12
+  )
+
+# to add a new columne you need to rename to something that did not excites before
+nhanes_small %>%
+  mutate(
+    age_month = age * 12
+  )
+# you can allways add more than 1 columne by using the comma "," at the end of each new colmun that
+# you added.
+nhanes_small %>%
+  mutate(
+    age_month = age * 12,
+    logged_bmi = log(bmi),
+    age_weeks = age_month * 4
+  )
+# previous we can use the age_month for age weeks, buecase the age_month is created before and the
+# muate with piping it follows 1 after the other.
+
+# for logic mutatation in the data set, if_else, is a logic command, and we can use that if something is ....
+# then do.... In this case old if the age is = or above 30 if not it is young.
+
+nhanes_small %>%
+  mutate(
+    age_month = age * 12,
+    logged_bmi = log(bmi),
+    age_weeks = age_month * 4,
+    old = if_else(
+      age >= 30,
+      "old",
+      "young"
+    )
+  )
+
+# to safe the data set with the mutation you can do
+nhanes_update <- nhanes_small %>%
+  mutate(
+    age_month = age * 12,
+    logged_bmi = log(bmi),
+    age_weeks = age_month * 4,
+    old = if_else(
+      age >= 30,
+      "old",
+      "young"
+    )
+  )
