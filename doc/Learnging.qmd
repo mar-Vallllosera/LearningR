@@ -3,8 +3,8 @@ title: "Reproducible documents"
 author: "Mar Vall-llosera"
 format: html
 ---
-- Mar Vallllosera
-- Food and nutrition science, Chalmers
+- Name: Mar Vall-llosera
+- Affiliation: Food and nutrition science, Chalmers
 
 ```{r setup}
 #| include: false
