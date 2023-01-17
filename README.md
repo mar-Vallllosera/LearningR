@@ -1,5 +1,7 @@
-# Mar Vall-llosera
-# Field of rearcher: Food Science
+Author: Mar Vall-llosera
+
+Field of researcher: Food Science
+
 TODO: Add more to the title of your project here
 
 # LearningR:
