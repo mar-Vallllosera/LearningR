@@ -1,4 +1,4 @@
-Author: Mar Vall-llosera
+Author: Mar Vall-llosera Juanola
 
 Field of researcher: Food Science
 
