@@ -118,7 +118,7 @@ nhanes_small %>%
 view(nhanes_small)
 
 # first ad the data then pipe, then we select the columnes we want, then we need
-# to pipe to conitnue fromt hat colmunes selctec for that reasong we add the %>%
+# to pipe to conitnue fromt hat colmunes selctec for that reason we add the %>%
 nhanes_small %>%
   select(
     starts_with("bp_")
@@ -126,3 +126,34 @@ nhanes_small %>%
   rename(
     bp_systolic = bp_sys_ave
   )
+
+
+# Filtering rows ----------------------------------------------------------
+# Filtering is depending on the logic that you apply, so it is challanging to apply filtering
+#when doing filtering double check with others to assure that is the correct way.
+# == translate to it is equal to, in this case we are filtering those that are inactive
+
+nhanes_small %>%
+    filter(phys_active == "No")
+
+#Adding the exclamation mark in front fo the =, leads to not eqaul to No
+nhanes_small %>%
+    filter(phys_active != "No")
+
+#for eaqual to a number
+
+nhanes_small %>%
+    filter(bmi == 25)
+
+#for eaqual or above to a number
+nhanes_small %>%
+    filter(bmi >= 25)
+#greater than the number and adding another filtering, for example in this case if they also active
+#in this case we use &, but "," is the same.
+nhanes_small %>%
+    filter(bmi >= 25&
+               phys_active == "No")
+#for or  | (ctrl+alt + key with bar in the bottom)
+nhanes_small %>%
+    filter(bmi == 25 |
+               phys_active == "No")
