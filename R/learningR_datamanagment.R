@@ -303,3 +303,17 @@ nhanes_small %>%
     max_bmi = max(bmi, na.rm = TRUE),
     min_bmi = min(bmi, na.rm = TRUE)
   )
+
+# you can ungroup by Ungroup (), so it does ot continue grouping
+
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  group_by(
+    diabetes,
+    phys_active
+  ) %>%
+  summarise(
+    max_bmi = max(bmi, na.rm = TRUE),
+    min_bmi = min(bmi, na.rm = TRUE)
+  ) %>%
+  ungroup()
