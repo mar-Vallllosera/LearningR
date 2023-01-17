@@ -97,4 +97,32 @@ nhanes_small %>%
   rename(
     physically_active = phys_active
   )
-#run the styler to make sure the code is tidy, and then commit
+# run the styler to make sure the code is tidy, and then commit
+# examples:
+nhanes_small %>%
+  select(
+    bp_sys_ave,
+    education
+  )
+nhanes_small %>%
+  rename(
+    bp_sys = bp_sys_ave,
+    bp_dia = bp_dia_ave
+  )
+
+nhanes_small %>%
+  select(
+    bmi,
+    contains("age")
+  )
+view(nhanes_small)
+
+# first ad the data then pipe, then we select the columnes we want, then we need
+# to pipe to conitnue fromt hat colmunes selctec for that reasong we add the %>%
+nhanes_small %>%
+  select(
+    starts_with("bp_")
+  ) %>%
+  rename(
+    bp_systolic = bp_sys_ave
+  )
