@@ -2,6 +2,7 @@
 title: "Reproducible documents"
 author: "Mar Vall-llosera"
 format: html
+theme: Yeti
 ---
 - Name: Mar Vall-llosera
 - Affiliation: Food and nutrition science, Chalmers
@@ -94,3 +95,8 @@ nhanes_small %>%
 
 # Discussion
 **Stability** *time*
+
+# Inserting images
+![Cute Otter and Cat.](cutadnotter.jpg){#fig-otter}
+
+Cute otter and kitten in @fig-otter
