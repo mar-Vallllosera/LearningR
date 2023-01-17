@@ -229,20 +229,77 @@ nhanes_update <- nhanes_small %>%
 
 # EXCERCISE ---------------------------------------------------------------
 
-#1. BMI between 20 and 40 with diabetes
+# 1. BMI between 20 and 40 with diabetes
 nhanes_small %>%
-    # Format should follow: variable >= number or character
-    filter(bmi>= 20 & bmi <= 40 & diabetes == "Yes")
+  # Format should follow: variable >= number or character
+  filter(bmi >= 20 & bmi <= 40 & diabetes == "Yes")
 
 # Pipe the data into mutate function and:
 nhanes_modified <- nhanes_small %>% # Specifying dataset
-    mutate(
-        # 2. Calculate mean arterial pressure
-        mean_arterial_pressure = ((2*bp_dia_ave)+bp_sys_ave)/3,
-        # 3. Create young_child variable using a condition
-        young_child = if_else(age < 6,
-                              "Yes",
-                              "No")
+  mutate(
+    # 2. Calculate mean arterial pressure
+    mean_arterial_pressure = ((2 * bp_dia_ave) + bp_sys_ave) / 3,
+    # 3. Create young_child variable using a condition
+    young_child = if_else(age < 6,
+      "Yes",
+      "No"
     )
+  )
 
 nhanes_modified
+
+
+# Summarizing -----------------------------------------------------
+
+# For this we can use summarise((min,max,mean,median,sd)), group_by(), arrange () and mutate ().
+# Group_by() needs another function to work as action
+# First summarise, it gives 1 row with value say, in this case the max value
+nhanes_small %>%
+  summarise(
+    max_bmi = max(bmi)
+  )
+
+# To remove the missing date so it can calculate the max
+
+nhanes_small %>%
+  summarise(
+    max_bmi = max(bmi, na.rm = TRUE)
+  )
+# add another value, so you summarise the 2 columns that you ask for and 1 row
+# with the value calculated
+
+nhanes_small %>%
+  summarise(
+    max_bmi = max(bmi, na.rm = TRUE),
+    min_bmi = min(bmi, na.rm = TRUE)
+  )
+# TO DO THE GROUP_BY, you select with what you want to group by
+nhanes_small %>%
+  group_by(diabetes) %>%
+  summarise(
+    max_bmi = max(bmi, na.rm = TRUE),
+    min_bmi = min(bmi, na.rm = TRUE)
+  )
+# to filter that something is not, for example missing, !(is.na) it means if not value for diabtes
+# remove.
+
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  group_by(diabetes) %>%
+  summarise(
+    max_bmi = max(bmi, na.rm = TRUE),
+    min_bmi = min(bmi, na.rm = TRUE)
+  )
+
+# to add a new variable then you can add a , and then extra value
+
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  group_by(
+    diabetes,
+    phys_active
+  ) %>%
+  summarise(
+    max_bmi = max(bmi, na.rm = TRUE),
+    min_bmi = min(bmi, na.rm = TRUE)
+  )
