@@ -317,3 +317,11 @@ nhanes_small %>%
     min_bmi = min(bmi, na.rm = TRUE)
   ) %>%
   ungroup()
+
+
+# safe data set -----------------------------------------------------------
+
+write_csv(
+    nhanes_small,
+    here::here("data/nhanes_small.csv")
+)
