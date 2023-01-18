@@ -89,14 +89,190 @@ nhanes_small %>%
 ## Analysis
 **Stadistical** *data*
 ```{r}
-2+2
+2 + 2
 ```
 
 
 # Discussion
 **Stability** *time*
 
-# Inserting images
+## Inserting images
 ![Cute Otter and Cat.](cutadnotter.jpg){#fig-otter}
 
 Cute otter and kitten in @fig-otter
+
+
+#Visualisation data
+
+### One variable plot
+ggplot(data frame, aes/mapping (define the variable) and then + ( similar to pipe) 
+and to get the graphs we need to add the  geomatry.
+Geomatry (geom)
+```{r}
+ggplot(nhanes_small, aes(x = bmi)) +
+  geom_histogram(na.rm = TRUE)
+```
+
+Now we want to reduce the data to does outlayers, so we are limitng the bmi to no more then 60. For that we use piping and the filter function. Then we add the ggplot, in this caes we do not need to add the data frame since we are using piping the data plot is already define. We start with statics and then right the geomatry.
+
+
+```{r}
+#| fig-cap: "Distribution of BMI."
+#| label: fig-bmi-histo
+nhanes_small %>%
+  filter(bmi <= 60) %>%
+  ggplot(aes(x = bmi)) +
+  geom_histogram(na.rm = TRUE)
+```
+
+See @fig-bmi-histo
+
+
+## Discrete varible
+to plot a categorical variable, you plot a count for example eduacation
+
+```{r}
+nhanes_small %>%
+  ggplot(aes(x = education)) +
+  geom_bar()
+```
+filter(!is.na(diabetes) indicates to filter for those that is not missing (!na.rm), in diabetes (dibetes)
+then to have 2 plots side by side. You can just add the extra plot and then you need to add YAML (#|) to create a caption . if we do this then we have only 1 caption for both graphs
+
+for individual caption do this:
+#| fig-subcap: 
+#|   - "Diabetes" (two spaces after the #| + - + 1 space + "label")
+#|   - "Education"(two spaces after the #| + - + 1 space + "label")
+
+Then to put them both side by side add 
+#| layout-ncol: 2
+
+
+```{r}
+#| label: fig-diabetes-education
+#| fig-cap: "Counts of diabetes and education"
+#| fig-subcap:
+#|   - "Diabetes"
+#|   - "Education"
+#| layout-ncol: 2
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes)) +
+  geom_bar()
+
+nhanes_small %>%
+  filter(!is.na(education)) %>%
+  ggplot(aes(x = education)) +
+  geom_bar()
+```
+
+
+## Plotting two-variables
+
+### Plotting two continous variables
+dependent on the y and independent on the x, we need to define x and y since is two variables. Then when the aes are done we define the geomatry, in this case a hexaone shape similar to scatter plot
+
+```{r}
+nhanes_small %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave)) +
+  geom_hex(na.rm = TRUE)
+```
+geam_smooth, is to add a line based on a regression of the data, to show some relation with your data at the same time. 
+
+```{r}
+nhanes_small %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave)) +
+  geom_hex(na.rm = TRUE) +
+  geom_smooth(na.rm = TRUE)
+```
+
+
+### two discrete variables
+
+This is 2 categorical values, there are 2 ways 1)      2)specific estetics you cannot define the x and y , only 1, for that we can use the fill functions then it will fille the colour vased on that variable. 
+
+(position = position_dodge()) this is to stacked the graphs
+
+
+```{r}
+nhanes_small %>%
+  filter(!is.na(education), !is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar(position = position_dodge())
+```
+
+### Discrete and continuous variables
+
+you have a categoricval in x and then y is numericaL. By adding to geom you superpoe one to another.  
+
+```{r}
+nhanes_small %>%
+  filter(!is.na(diabetes), bmi <= 60) %>%
+  ggplot(aes(x = diabetes, y = bmi)) +
+  geom_violin(na.rm = TRUE) +
+  geom_boxplot(na.rm = TRUE, width = 0.1)
+```
+
+## Exercise to make plots with one or two variables
+
+```{r}
+library(NHANES)
+nhanes_exercise <- NHANES %>%
+  rename_with(snakecase::to_snake_case) %>%
+  rename(sex = gender)
+view(nhanes_exercise)
+```
+
+#Distribution of age
+
+```{r}
+#| label: distri-age
+#| fig-cap: "distribution by age"
+#| layout-ncol: 2
+#| fig-subcap:
+#|  - "age"
+#|  - "Diabetes by age"
+
+ggplot(nhanes_exercise, aes(x = age)) +
+  geom_density(na.rm = TRUE)
+
+ggplot(nhanes_exercise, aes(x = diabetes_age)) +
+  geom_density(na.rm = TRUE)
+```
+
+##Number of people who smoke now and are or above 20 years of age,
+## removing those with missing smoking status.
+
+```{r}
+#|label: smoke-now
+#|ffig-cap: "smoke-people"
+nhanes_exercise %>%
+  filter(smoke_age >= 20, !is.na(smoke_now)) %>%
+  ggplot(aes(x = smoke_now)) +
+  geom_bar(na.rm = TRUE)
+``` 
+
+### 9.5-4. missing TITLE
+
+```{r}
+nhanes_exercise %>% 
+    mutate(mean_arterial_pressure = bp_sys_ave + (2* bp_sys_ave)/3) %>% 
+    ggplot(aes(x=bmi, y= mean_arterial_pressure))+
+    geom_hex(na.rm = TRUE)+
+    geom_smooth()
+ 
+```
+
+
+
+### three or more variables
+is styoltic blood pressure different in those with or without diabetes and dependent of eductation?
+
+```{r}
+nhanes_small %>% 
+    filter(!is.na(diabetes), !is.na(education)) %>% 
+    ggplot(aes(x = education, y = bp_sys_ave, colour = diabetes))+
+    geom_boxplot(na.rm = TRUE)
+    
+```
+
